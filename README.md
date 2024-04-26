@@ -106,7 +106,7 @@ If you want to use the latest features, specify the `nightly` tag:
 docker pull doccano/doccano:nightly
 ```
 
-### Docker Compose
+### Docker Compose Using inner postgres
 
 You need to install Git and clone the repository:
 
@@ -144,6 +144,48 @@ After running the following command, access <http://127.0.0.1/>.
 ```bash
 docker-compose -f docker/docker-compose.prod.yml --env-file .env up
 ```
+
+### Docker Compose Using outside postgres
+
+You need to install Git and clone the repository:
+
+```bash
+git clone https://github.com/doccano/doccano.git
+cd doccano
+```
+
+_Note for Windows developers:_ Be sure to configure git to correctly handle line endings or you may encounter `status code 127` errors while running the services in future steps. Running with the git config options below will ensure your git directory correctly handles line endings.
+
+```bash
+git clone https://github.com/doccano/doccano.git --config core.autocrlf=input
+```
+
+Then, create an `.env` file with variables in the following format (see [./docker/docker-compose.prod.yml](https://github.com/doccano/doccano/blob/master/docker/docker-compose.prod.yml)):
+
+```plain
+# platform settings
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=password
+ADMIN_EMAIL=admin@example.com
+
+# rabbit mq settings
+RABBITMQ_DEFAULT_USER=doccano
+RABBITMQ_DEFAULT_PASS=doccano
+
+# database settings
+POSTGRES_USER=doccano
+POSTGRES_PASSWORD=doccano
+POSTGRES_DB=doccano
+POSTGRES_HOST=YOUR_POSTGRES_HOST
+POSTGRES_DB=YOUR_POSTGRES_DB_NAME
+```
+
+After running the following command, access <http://127.0.0.1/>.
+
+```bash
+docker-compose -f docker/docker-compose-out-postgres.yml --env-file .env up
+```
+
 
 ### One-click Deployment
 
